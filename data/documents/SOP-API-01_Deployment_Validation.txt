@@ -1,0 +1,14 @@
+SOP-API-01: Standard Operating Procedure - API Deployment Validation
+Category: SOP | Service: Payment API, Order Service, User Service | Department: Platform Engineering | Version: 3.0
+
+Section 1 - Pre-deployment checklist
+Verify the release manifest references an existing ConfigMap and Kubernetes Secret for the target namespace. Confirm environment variables match the vault entries. Validate database migration scripts on a staging replica before promotion.
+
+Section 2 - Secret and configuration validation
+Inspect Kubernetes Secret values with kubectl get secret payment-secrets -o yaml and compare checksums with the vault. An incorrect Kubernetes Secret or a missing Secret key is a frequent cause of HTTP 503 and CrashLoopBackOff after deployment. Re-apply the corrected Secret with kubectl apply and restart affected pods.
+
+Section 3 - Post-deployment monitoring
+Inspect application logs for the first 15 minutes after rollout. Monitor the 5xx error rate dashboard, pod restart counters and JVM heap usage. If the error rate exceeds 1 percent, halt the rollout immediately.
+
+Section 4 - Health probe requirements
+Every service must expose /healthz (liveness) and /readyz (readiness). Liveness probe timeout must be at least 5 seconds to avoid restart loops on cold start. Readiness probes must fail while database connectivity is unavailable so the load balancer removes the pod from rotation.

@@ -1,0 +1,188 @@
+{
+ "incidents": [
+  {
+   "id": "INC-542",
+   "title": "Payment API returns HTTP 503 after deployment",
+   "service": "Payment API",
+   "category": "Application/Deployment",
+   "severity": "P1",
+   "environment": "Production",
+   "date": "2026-01-14",
+   "root_cause": "Missing ConfigMap payment-config in the production namespace after the release",
+   "resolution": "Reapplied ConfigMap and restarted pods; validated endpoints",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "RUNBOOK-005",
+    "SOP-API-01"
+   ]
+  },
+  {
+   "id": "INC-231",
+   "title": "Database connection timeout in Order Service",
+   "service": "Order Service",
+   "category": "Database",
+   "severity": "P1",
+   "environment": "Production",
+   "date": "2026-02-11",
+   "root_cause": "Connection pool exhaustion with locked orders table from a failed migration",
+   "resolution": "Killed long transactions, raised pool to 64, re-ran migration offline",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "RCA-018"
+   ]
+  },
+  {
+   "id": "INC-904",
+   "title": "Connection pool exhaustion across order and billing pods",
+   "service": "Order Service",
+   "category": "Database",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2025-11-02",
+   "root_cause": "Autoscaling added pods without raising PostgreSQL max_connections",
+   "resolution": "Raised max_connections and gated autoscaling on DB capacity",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "RCA-018",
+    "ARCHITECTURE-001"
+   ]
+  },
+  {
+   "id": "INC-1042",
+   "title": "Database service unavailable after primary failover",
+   "service": "PostgreSQL Database",
+   "category": "Database",
+   "severity": "P1",
+   "environment": "Production",
+   "date": "2026-03-27",
+   "root_cause": "Replica promotion failed due to stale credentials in the connection string",
+   "resolution": "Rotated credentials in the Secret and promoted healthy replica",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "SOP-API-01"
+   ]
+  },
+  {
+   "id": "INC-731",
+   "title": "Payment pods in CrashLoopBackOff after image upgrade",
+   "service": "Payment API",
+   "category": "Kubernetes / Container",
+   "severity": "P1",
+   "environment": "Production",
+   "date": "2026-01-20",
+   "root_cause": "Liveness probe timeout too low for cold start in the new image",
+   "resolution": "Rolled back image tag and fixed probe timings",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "RUNBOOK-005",
+    "SOP-API-01"
+   ]
+  },
+  {
+   "id": "INC-418",
+   "title": "Production server CPU utilization exceeded 95 percent",
+   "service": "API Gateway",
+   "category": "Compute / Resource",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2026-04-02",
+   "root_cause": "Traffic surge plus nginx worker CPU saturation without autoscaling headroom",
+   "resolution": "Scaled gateway replicas and enabled HPA on CPU at 70 percent",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "ARCHITECTURE-001"
+   ]
+  },
+  {
+   "id": "INC-044",
+   "title": "User service pods OOMKilled during traffic surge",
+   "service": "User Service",
+   "category": "Compute / Resource",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2026-02-14",
+   "root_cause": "Memory limit below working set with unbounded response cache",
+   "resolution": "Raised limit to 1Gi, capped cache, HPA on memory",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "INC-044_Pod_OOMKilled_Postmortem"
+   ]
+  },
+  {
+   "id": "INC-305",
+   "title": "Users cannot log in after auth deployment",
+   "service": "Auth Service",
+   "category": "Security / Auth",
+   "severity": "P1",
+   "environment": "Production",
+   "date": "2026-03-08",
+   "root_cause": "SSO token signing key rotation skipped in one namespace leaving invalid tokens",
+   "resolution": "Applied rotated key Secret and restarted auth pods",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "SOP-API-01",
+    "CHG-042"
+   ]
+  },
+  {
+   "id": "INC-311",
+   "title": "Intermittent microservice request timeouts between services",
+   "service": "API Gateway",
+   "category": "Network",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2026-04-19",
+   "root_cause": "Network policy change dropped DNS responses; conntrack table saturation",
+   "resolution": "Rolled back netpol, raised conntrack limits",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "ARCHITECTURE-001"
+   ]
+  },
+  {
+   "id": "INC-288",
+   "title": "Production server disk utilization reached 95 percent",
+   "service": "Application Server",
+   "category": "Storage",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2026-05-05",
+   "root_cause": "Unrotated container logs filled the node disk",
+   "resolution": "Cleaned /var/log, enabled logrotate and size-limited emptyDir",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "TROUBLESHOOTING-007"
+   ]
+  },
+  {
+   "id": "INC-655",
+   "title": "Payment 503 responses during canary rollout",
+   "service": "Payment API",
+   "category": "Application/Deployment",
+   "severity": "P2",
+   "environment": "Production",
+   "date": "2026-05-22",
+   "root_cause": "Readiness probe failed while database migration still held locks",
+   "resolution": "Paused canary, completed migration, resumed rollout",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "RUNBOOK-005"
+   ]
+  },
+  {
+   "id": "INC-671",
+   "title": "Kafka consumer lag causes delayed notifications",
+   "service": "Notification Service",
+   "category": "Middleware",
+   "severity": "P3",
+   "environment": "Production",
+   "date": "2026-06-01",
+   "root_cause": "Poison message loop on partition 3 with too few consumers",
+   "resolution": "Isolated poison message to DLQ and scaled consumers to partition count",
+   "outcome": "RESOLVED",
+   "linked_docs": [
+    "TROUBLESHOOTING-007"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+id,title,service,category,severity,date,root_cause,resolution
+INC-542,Payment API returns HTTP 503 after deployment,Payment API,Application/Deployment,P1,2026-01-14,Missing ConfigMap in production namespace,Reapplied ConfigMap and restarted pods
+INC-231,Database connection timeout in Order Service,Order Service,Database,P1,2026-02-11,Connection pool exhaustion with locked orders table,Killed long transactions and raised pool to 64
+INC-904,Connection pool exhaustion after scale-out,Order Service,Database,P2,2025-11-02,max_connections not raised with pod count,Raised PostgreSQL max_connections to 200
+INC-1042,Database service unavailable after failover,PostgreSQL Database,Database,P1,2026-03-27,Stale credentials in connection string after promotion,Rotated Secret and promoted healthy replica
+INC-731,Payment pods CrashLoopBackOff after image upgrade,Payment API,Kubernetes / Container,P1,2026-01-20,Liveness probe timeout too low for cold start,Rolled back image tag and fixed probe timings
+INC-418,Production server CPU exceeded 95 percent,API Gateway,Compute / Resource,P2,2026-04-02,Traffic surge without autoscaling headroom,Scaled replicas and enabled HPA at 70 percent CPU
+INC-044,User service pods OOMKilled under load,User Service,Compute / Resource,P2,2026-02-14,Memory limit below working set with unbounded cache,Raised memory limit to 1Gi and capped cache
+INC-305,Login failures after deployment,Auth Service,Security / Auth,P1,2026-03-08,SSO token signing key rotation skipped in one namespace,Applied rotated key Secret and restarted pods
+INC-311,Intermittent microservice timeouts,API Gateway,Network,P2,2026-04-19,Network policy dropped DNS and conntrack saturation,Rolled back netpol and raised conntrack limits
+INC-288,Disk utilization reached 95 percent,Application Server,Storage,P2,2026-05-05,Unrotated container logs filled node disk,Cleaned logs and enabled logrotate
+INC-655,Payment 503 during canary rollout,Payment API,Application/Deployment,P2,2026-05-22,Readiness probe failed during locked migration,Paused canary until migration completed
+INC-671,Kafka consumer lag delays notifications,Notification Service,Middleware,P3,2026-06-01,Poison message loop with too few consumers,Isolated poison message and scaled consumers

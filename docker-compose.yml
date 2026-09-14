@@ -1,0 +1,57 @@
+# AI Incident Resolution Assistant - full stack
+#
+#   docker compose up --build          # then open http://localhost:8080
+#   docker compose run --rm backend python ../scripts/seed_demo.py --fresh
+#   docker compose logs -f backend
+#   docker compose down -v             # also drops the Postgres + data volumes
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: aira
+      POSTGRES_PASSWORD: aira_dev_password
+      POSTGRES_DB: aira
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aira -d aira"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "5432:5432"          # drop this if you already run Postgres locally
+
+  backend:
+    build: ./backend
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg2://aira:aira_dev_password@postgres:5432/aira
+      DATA_DIR: /data
+      SECRET_KEY: ${SECRET_KEY:-please-change-this-to-a-40+-byte-random-string}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-admin@aira.test}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-Admin@12345}
+      BOOTSTRAP_USER_EMAIL: ${BOOTSTRAP_USER_EMAIL:-engineer@aira.test}
+      BOOTSTRAP_USER_PASSWORD: ${BOOTSTRAP_USER_PASSWORD:-Engineer@123}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      LLM_ENABLED: ${LLM_ENABLED:-auto}
+      SERVE_FRONTEND: "false"   # nginx serves the UI and proxies /api
+    volumes:
+      - airadata:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
+  airadata:

@@ -1,0 +1,46 @@
+# --- python / backend ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- node / frontend ---
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# --- secrets: keep .env* except the committed examples ---
+.env
+.env.*
+!.env.example
+!.env.test
+!.env.dev
+
+# --- local data (regenerate with scripts/seed_demo.py --fresh) ---
+data/*.db
+data/*.db-journal
+data/vectorstore/
+data/documents/*
+!data/documents/*.md
+!data/documents/*.pdf
+!data/documents/*.docx
+!data/documents/*.txt
+!data/documents/*.csv
+!data/documents/*.json
+!data/documents/*.log
+!data/documents/*.xlsx
+!data/documents/*.html
+!data/documents/*.doc
+
+# --- editors / os ---
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.log
