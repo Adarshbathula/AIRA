@@ -1,27 +1,29 @@
-# Render Blueprint - free Hobby tier, one service (API + built UI).
-#   1. push this repo to GitHub
-#   2. Dashboard -> New -> Blueprint -> pick the repo (auto-detects this file)
 services:
   - type: web
     name: aira
-    runtime: docker                      # uses ./Dockerfile.deploy at the repo root
-    plan: free                           # 512 MB RAM, 0.1 CPU, sleeps after 15 min idle
-    dockerfilePath: ./Dockerfile.deploy  # context = repo root (single service: UI + API)
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.deploy
     healthCheckPath: /api/health
+
     envVars:
-      - key: SECRET_KEY                  # 32+ bytes; generate in the dashboard
+      - key: SECRET_KEY
         generateValue: true
-      - key: DATA_DIR
-        value: /data
+
       - key: BOOTSTRAP_ADMIN_EMAIL
         value: admin@aira.test
+
       - key: BOOTSTRAP_ADMIN_PASSWORD
-        sync: false                      # set once in the Render dashboard
+        sync: false
+
       - key: BOOTSTRAP_USER_EMAIL
         value: engineer@aira.test
+
       - key: BOOTSTRAP_USER_PASSWORD
         sync: false
-      - key: GROQ_API_KEY                # optional: fluent phrasing; leave empty for offline mode
+
+      - key: GROQ_API_KEY
         sync: false
+
       - key: LLM_ENABLED
         value: auto
