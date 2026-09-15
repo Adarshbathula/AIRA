@@ -2,24 +2,24 @@
 services:
   - type: web
     name: aira
-    runtime: docker                      # uses ./Dockerfile.deploy at the repo root
-    plan: free                           # 512 MB RAM, 0.1 CPU, sleeps after 15 min idle
-    dockerfilePath: ./Dockerfile.deploy  # context = repo root (single service: UI + API)
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.deploy
     healthCheckPath: /api/health
     envVars:
-      - key: SECRET_KEY                  # 32+ bytes; generated for you
+      - key: SECRET_KEY
         generateValue: true
       - key: DATA_DIR
-        value: /tmp/data                 # writable on the container FS
+        value: /tmp                      # <-- Changed from /tmp/data to /tmp
       - key: BOOTSTRAP_ADMIN_EMAIL
         value: admin@aira.test
       - key: BOOTSTRAP_ADMIN_PASSWORD
-        sync: false                      # type once in the Render dashboard
+        sync: false
       - key: BOOTSTRAP_USER_EMAIL
         value: engineer@aira.test
       - key: BOOTSTRAP_USER_PASSWORD
         sync: false
-      - key: GROQ_API_KEY                 # optional; empty = deterministic mode
+      - key: GROQ_API_KEY
         sync: false
       - key: LLM_ENABLED
         value: auto
