@@ -8,7 +8,7 @@ export function CitationChip({ label, onClick }: { label: string; onClick?: () =
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 font-mono text-[11px] text-slate-600
+      className={`rounded-md border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#171717] px-1.5 py-0.5 font-mono text-[11px] text-slate-600 dark:text-slate-300
         ${onClick ? "hover:border-brand-400 hover:text-brand-600" : "cursor-default"}`}
       title={onClick ? "Show supporting excerpt" : "Evidence citation"}
     >
@@ -40,28 +40,28 @@ export default function EvidencePanel({ evidence, claims }: { evidence: Retrieve
           ? "PARTIALLY_SUPPORTED" : related.length ? "SUPPORTED" : null;
         const open = expanded === e.chunk_ref;
         return (
-          <li key={e.chunk_ref} className="rounded-lg border border-slate-200 bg-white">
+          <li key={e.chunk_ref} className="rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#262626]">
             <button
               className="flex w-full items-center gap-2 px-3 py-2 text-left"
               onClick={() => setExpanded(open ? null : e.chunk_ref)}
             >
-              <span className="font-mono text-xs font-semibold text-brand-600">{e.citation}</span>
+              <span className="font-mono text-xs font-semibold text-brand-600 dark:text-brand-400">{e.citation}</span>
               <Badge>{e.category}</Badge>
-              {e.section && <span className="truncate text-xs text-slate-500">{e.section}</span>}
+              {e.section && <span className="truncate text-xs text-slate-500 dark:text-slate-400">{e.section}</span>}
               <span className="ml-auto flex shrink-0 items-center gap-2">
                 {worst && <Badge tone={evidenceTone(worst)}>{worst.replace("_", " ")}</Badge>}
-                <span className="text-[11px] tabular-nums text-slate-400" title="vector similarity">sim {pct(e.score)}</span>
-                <span className="text-slate-400">{open ? "▾" : "▸"}</span>
+                <span className="text-[11px] tabular-nums text-slate-400 dark:text-slate-500" title="vector similarity">sim {pct(e.score)}</span>
+                <span className="text-slate-400 dark:text-slate-500">{open ? "▾" : "▸"}</span>
               </span>
             </button>
             {open && (
-              <div className="border-t border-slate-100 bg-slate-50/70 px-3 py-2">
-                <p className="text-[11px] text-slate-500">
+              <div className="border-t border-slate-100 dark:border-white/5 bg-slate-50/70 px-3 py-2">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
                   {e.document_name}
                   {e.service ? ` · ${e.service}` : ""}
                   {e.page ? ` · page ${e.page}` : ""} · chunk <span className="font-mono">{e.chunk_ref}</span>
                 </p>
-                <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-slate-700">
+                <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed text-slate-700 dark:text-slate-300">
                   {open ? e.text : e.text.slice(0, 240)}
                 </p>
               </div>

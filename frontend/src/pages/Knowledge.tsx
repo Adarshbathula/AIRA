@@ -62,8 +62,8 @@ export default function Knowledge() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Enterprise knowledge base</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Enterprise knowledge base</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             SOPs, runbooks, RCAs, incident reports, architecture docs and logs that ground every AI answer.
           </p>
         </div>
@@ -99,19 +99,19 @@ export default function Knowledge() {
 
       {results && (
         <Card title={`Semantic matches for “${results.query}”`} subtitle={`${results.chunks.length} chunks · ${results.took_ms} ms · categories: ${Object.entries(results.by_category).map(([k, v]) => `${k}(${v})`).join(", ") || "none"}`}
-          actions={<button className="text-xs font-medium text-slate-400 hover:text-slate-700" onClick={() => setResults(null)}>close</button>}>
+          actions={<button className="text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-slate-700" onClick={() => setResults(null)}>close</button>}>
           {results.chunks.length ? (
             <ul className="space-y-2">
               {results.chunks.map((c) => (
-                <li key={c.chunk_ref} className="rounded-lg border border-slate-100 px-3 py-2">
+                <li key={c.chunk_ref} className="rounded-lg border border-slate-100 dark:border-white/5 px-3 py-2">
                   <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className="font-mono font-semibold text-brand-600">{c.citation}</span>
+                    <span className="font-mono font-semibold text-brand-600 dark:text-brand-400">{c.citation}</span>
                     <Badge>{c.category}</Badge>
-                    {c.service && <Badge tone="bg-slate-100 text-slate-600 ring-1 ring-slate-200">{c.service}</Badge>}
-                    {c.section && <span className="text-slate-500">{c.section}</span>}
-                    <span className="ml-auto tabular-nums text-slate-400">sim {pct(c.score)}</span>
+                    {c.service && <Badge tone="bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10">{c.service}</Badge>}
+                    {c.section && <span className="text-slate-500 dark:text-slate-400">{c.section}</span>}
+                    <span className="ml-auto tabular-nums text-slate-400 dark:text-slate-500">sim {pct(c.score)}</span>
                   </div>
-                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-600">{c.text}</p>
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{c.text}</p>
                 </li>
               ))}
             </ul>
@@ -121,38 +121,38 @@ export default function Knowledge() {
 
       <Card bodyClass="p-0">
         {loading ? (
-          <div className="flex justify-center py-20 text-slate-400"><Spinner className="h-7 w-7" /></div>
+          <div className="flex justify-center py-20 text-slate-400 dark:text-slate-500"><Spinner className="h-7 w-7" /></div>
         ) : docs.length === 0 ? (
           <div className="p-6"><EmptyState title="No documents found" hint={isAdmin ? "Upload enterprise documents to power the assistant." : "Ask an administrator to seed the knowledge base."} /></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px]">
-              <thead className="border-b border-slate-100 bg-slate-50/70">
+              <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
                 <tr>
                   <th className="th">Document</th><th className="th">Category</th><th className="th">Service</th>
                   <th className="th">Department</th><th className="th">Type</th><th className="th">Chunks</th>
                   <th className="th">Size</th><th className="th">Updated</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {docs.map((d) => (
-                  <tr key={d.id} className="cursor-pointer hover:bg-slate-50" onClick={() => void documentApi.detail(d.id).then(setDetail)}>
+                  <tr key={d.id} className="cursor-pointer hover:bg-slate-50 hover:dark:bg-[#262626]" onClick={() => void documentApi.detail(d.id).then(setDetail)}>
                     <td className="td">
-                      <p className="font-medium text-slate-800">{d.name}</p>
-                      <p className="text-[11px] text-slate-400">{d.document_no} · cite as <span className="font-mono text-brand-600">{d.citation_label}</span></p>
+                      <p className="font-medium text-slate-800 dark:text-slate-200">{d.name}</p>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">{d.document_no} · cite as <span className="font-mono text-brand-600 dark:text-brand-400">{d.citation_label}</span></p>
                     </td>
                     <td className="td"><Badge tone="bg-violet-50 text-violet-700 ring-1 ring-violet-200">{d.category}</Badge></td>
-                    <td className="td text-slate-600">{d.service ?? "—"}</td>
-                    <td className="td text-xs text-slate-500">{d.department ?? "—"}</td>
-                    <td className="td"><Badge tone="bg-slate-100 text-slate-600 ring-1 ring-slate-200 uppercase">{d.type}</Badge></td>
-                    <td className="td tabular-nums text-slate-600">{d.chunk_count}</td>
-                    <td className="td text-xs text-slate-500">{fmtBytes(d.file_size)}</td>
-                    <td className="td whitespace-nowrap text-xs text-slate-500">{fmtDate(d.created_at)}</td>
+                    <td className="td text-slate-600 dark:text-slate-300">{d.service ?? "—"}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{d.department ?? "—"}</td>
+                    <td className="td"><Badge tone="bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10 uppercase">{d.type}</Badge></td>
+                    <td className="td tabular-nums text-slate-600 dark:text-slate-300">{d.chunk_count}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{fmtBytes(d.file_size)}</td>
+                    <td className="td whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{fmtDate(d.created_at)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <p className="border-t border-slate-100 px-4 py-2 text-[11px] text-slate-400">{total} document(s) · click a row to inspect extracted chunks</p>
+            <p className="border-t border-slate-100 dark:border-white/5 px-4 py-2 text-[11px] text-slate-400 dark:text-slate-500">{total} document(s) · click a row to inspect extracted chunks</p>
           </div>
         )}
       </Card>
@@ -160,7 +160,7 @@ export default function Knowledge() {
       <Modal open={!!detail} onClose={() => setDetail(null)} title={detail ? `${detail.name} (${detail.document_no})` : ""} width="max-w-3xl">
         {detail && (
           <div className="space-y-3">
-            <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+            <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
               <Badge tone="bg-violet-50 text-violet-700 ring-1 ring-violet-200">{detail.category}</Badge>
               {detail.service && <Badge>{detail.service}</Badge>}
               {detail.department && <Badge>{detail.department}</Badge>}
@@ -169,16 +169,16 @@ export default function Knowledge() {
               <Badge>{detail.chunk_count} chunks</Badge>
               {detail.page_count && <Badge>{detail.page_count} pages</Badge>}
             </div>
-            <div className="max-h-[52vh] space-y-2 overflow-y-auto rounded-lg border border-slate-100 bg-slate-50/50 p-2">
+            <div className="max-h-[52vh] space-y-2 overflow-y-auto rounded-lg border border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 p-2">
               {detail.chunks.map((c) => (
-                <div key={c.chunk_ref} className="rounded-md bg-white p-2.5 shadow-sm ring-1 ring-slate-100">
-                  <p className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-slate-400">
+                <div key={c.chunk_ref} className="rounded-md bg-white dark:bg-[#262626] p-2.5 shadow-sm dark:shadow-none ring-1 ring-slate-100 dark:ring-white/5">
+                  <p className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     <span className="font-mono">{c.chunk_ref}</span>
                     {c.section && <span>· {c.section}</span>}
                     {c.page && <span>· p.{c.page}</span>}
                     <span className="ml-auto">≈{c.tokens} tokens</span>
                   </p>
-                  <p className="mt-1 whitespace-pre-wrap text-xs leading-relaxed text-slate-700">{c.preview}{c.preview.length >= 600 ? " …" : ""}</p>
+                  <p className="mt-1 whitespace-pre-wrap text-xs leading-relaxed text-slate-700 dark:text-slate-300">{c.preview}{c.preview.length >= 600 ? " …" : ""}</p>
                 </div>
               ))}
             </div>

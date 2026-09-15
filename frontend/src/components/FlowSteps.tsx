@@ -24,26 +24,26 @@ export default function FlowSteps({ trace, defaultOpen = false }: { trace: NodeT
   const [open, setOpen] = useState(defaultOpen);
   const retries = trace.filter((t) => t.status === "retry").length;
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50/70">
+    <div className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50/70">
       <button
-        className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+        className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900"
         onClick={() => setOpen((o) => !o)}
       >
         <span>
           LangGraph workflow trace {open ? "▾" : "▸"}
           {retries > 0 && <span className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">self-healed ×{retries}</span>}
         </span>
-        <span className="tabular-nums text-slate-400">{trace.reduce((a, t) => a + (t.ms || 0), 0).toFixed(0)} ms</span>
+        <span className="tabular-nums text-slate-400 dark:text-slate-500">{trace.reduce((a, t) => a + (t.ms || 0), 0).toFixed(0)} ms</span>
       </button>
       {open && (
         <ol className="space-y-1.5 px-3 pb-3">
           {trace.map((t, i) => (
             <li key={`${t.node}-${i}`} className="flex items-start gap-2 text-xs">
               <span className={`mt-1 h-2 w-2 shrink-0 rounded-full ${tone(t.status)}`} />
-              <span className="w-44 shrink-0 font-medium text-slate-700">{LABELS[t.node] ?? t.node}</span>
-              <span className="flex-1 leading-relaxed text-slate-500">
+              <span className="w-44 shrink-0 font-medium text-slate-700 dark:text-slate-300">{LABELS[t.node] ?? t.node}</span>
+              <span className="flex-1 leading-relaxed text-slate-500 dark:text-slate-400">
                 {t.detail ?? "—"}
-                {!!t.ms && <span className="ml-1.5 tabular-nums text-slate-400">({t.ms.toFixed(0)}ms)</span>}
+                {!!t.ms && <span className="ml-1.5 tabular-nums text-slate-400 dark:text-slate-500">({t.ms.toFixed(0)}ms)</span>}
               </span>
             </li>
           ))}

@@ -1,0 +1,41 @@
+# Single-service image for free hosting tiers (Render / Koyeb / Fly / Railway).
+# Build context MUST be the repo root:  docker build -f Dockerfile.deploy .
+# The React app is built in a node stage and served by FastAPI, so ONE process
+# gives you UI + API + RAG (no second service, no CORS, no proxy config).
+FROM node:20-alpine AS ui
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY frontend/ ./
+RUN npm run build
+
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1 \
+    AIRA_ENV=production SERVE_FRONTEND=true LLM_ENABLED=auto
+WORKDIR /app
+
+# --- python deps (slim list: no pytest/reportlab, no psycopg unless you need it)
+COPY backend/requirements.deploy.txt /app/backend/requirements.deploy.txt
+RUN pip install -r /app/backend/requirements.deploy.txt
+
+# --- app + UI build + seed material
+COPY backend/ /app/backend/
+COPY scripts/ /app/scripts/
+COPY data/documents/ /app/data/documents/
+COPY data/incidents/ /app/data/incidents/
+COPY --from=ui /build/dist /app/frontend/dist
+
+# Warm the embedding model into the image so a cold container never downloads
+# ~90 MB from Hugging Face at boot (that download is what blows past a free-tier
+# health-check timeout). Uses the app's own provider code - no hard-coded model path.
+RUN cd /app/backend && python -c \
+    "from app.rag.embeddings.provider import get_embeddings; e=get_embeddings(); \
+     print('embeddings ready:', e.model_name, e.dimension, 'dim')" || true
+
+# Bake demo knowledge base + bootstrap accounts into the image: free tiers have no
+# persistent disk, so a cold start must still be useful without re-seeding.
+RUN mkdir -p /app/data && cd /app/backend && python ../scripts/seed_demo.py || true
+
+EXPOSE 8000
+# Render/Koyeb/Fly inject $PORT; honour it and default to 8000 for local runs.
+CMD ["sh", "-c", "cd /app/backend && exec python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

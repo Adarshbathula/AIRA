@@ -60,15 +60,15 @@ export default function IncidentDetail() {
     }
   };
 
-  if (loading) return <div className="flex justify-center py-24 text-slate-400"><Spinner className="h-8 w-8" /></div>;
+  if (loading) return <div className="flex justify-center py-24 text-slate-400 dark:text-slate-500"><Spinner className="h-8 w-8" /></div>;
   if (error || !ai) return <ErrorNote message={error || "Unknown error"} />;
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Link to="/incidents" className="text-xs font-medium text-slate-500 hover:text-brand-600">← Incidents</Link>
-        <h2 className="text-lg font-semibold text-slate-900">{ai.public_id}</h2>
-        <span className="text-xs text-slate-500">{fmtDate(ai.timestamp)}</span>
+        <Link to="/incidents" className="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-brand-600">← Incidents</Link>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{ai.public_id}</h2>
+        <span className="text-xs text-slate-500 dark:text-slate-400">{fmtDate(ai.timestamp)}</span>
         <div className="ml-auto flex items-center gap-2">
           <select className="input w-40 py-1.5 text-xs" value={status} onChange={(e) => void changeStatus(e.target.value)}>
             <option value="OPEN" disabled>Set status…</option>
@@ -89,15 +89,15 @@ export default function IncidentDetail() {
         {related.length ? (
           <ul className="grid gap-2 md:grid-cols-2">
             {related.map((s) => (
-              <li key={s.public_id} className="rounded-lg border border-slate-100 bg-slate-50/60 px-3 py-2.5">
+              <li key={s.public_id} className="rounded-lg border border-slate-100 dark:border-white/5 bg-slate-50/60 dark:bg-white/5 px-3 py-2.5">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-semibold text-slate-700">{s.public_id}</span>
-                  {s.severity && <Badge tone="bg-slate-100 text-slate-600 ring-1 ring-slate-200">{s.severity}</Badge>}
-                  <span className="ml-auto text-xs font-semibold text-emerald-700">{pct(s.similarity)}</span>
+                  <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">{s.public_id}</span>
+                  {s.severity && <Badge tone="bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10">{s.severity}</Badge>}
+                  <span className="ml-auto text-xs font-semibold text-emerald-700 dark:text-emerald-300">{pct(s.similarity)}</span>
                 </div>
-                <p className="mt-1 text-xs text-slate-600">{s.title}</p>
-                {s.root_cause && <p className="mt-0.5 text-[11px] text-slate-500">cause: {s.root_cause}</p>}
-                {s.resolution && <p className="text-[11px] text-emerald-700">fix: {s.resolution}</p>}
+                <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">{s.title}</p>
+                {s.root_cause && <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">cause: {s.root_cause}</p>}
+                {s.resolution && <p className="text-[11px] text-emerald-700 dark:text-emerald-300">fix: {s.resolution}</p>}
               </li>
             ))}
           </ul>

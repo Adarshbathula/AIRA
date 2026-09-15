@@ -40,7 +40,7 @@ export default function Dashboard() {
   );
   const serviceData = useMemo(() => (inc?.top_services ?? []).slice(0, 6), [inc]);
 
-  if (loading) return <div className="flex justify-center py-24 text-slate-400"><Spinner className="h-8 w-8" /></div>;
+  if (loading) return <div className="flex justify-center py-24 text-slate-400 dark:text-slate-500"><Spinner className="h-8 w-8" /></div>;
   if (error) return <ErrorNote message={error} />;
   if (!ov) return <EmptyState title="No dashboard data yet" hint="Analyse your first incident in the assistant." />;
 
@@ -48,8 +48,8 @@ export default function Dashboard() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Welcome back, {user?.name?.split(" ")[0]}</h2>
-          <p className="text-sm text-slate-500">Operational snapshot across analysed incidents{user?.role === "admin" ? " (org-wide)" : " (your workspace)"}.</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Welcome back, {user?.name?.split(" ")[0]}</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Operational snapshot across analysed incidents{user?.role === "admin" ? " (org-wide)" : " (your workspace)"}.</p>
         </div>
         <Link to="/assistant" className="btn-primary">+ New Incident Analysis</Link>
       </div>
@@ -58,7 +58,7 @@ export default function Dashboard() {
         <Kpi label="Incidents analysed" value={ov.total_incidents} hint={`${ov.incidents_last_7_days} in the last 7 days`} />
         <Kpi label="Avg AI confidence" value={pct(ov.avg_confidence)} hint="across your analysed incidents" tone={ov.avg_confidence >= 0.7 ? "text-emerald-600" : "text-amber-600"} />
         <Kpi label="Good retrieval" value={pct(ov.good_retrieval_pct)} hint={`avg ${ov.avg_retrieval_attempts} retrieval attempt(s)`} />
-        <Kpi label="High severity (P0/P1)" value={ov.high_severity} hint={`${ov.resolved_incidents} marked resolved`} tone={ov.high_severity ? "text-rose-600" : "text-slate-900"} />
+        <Kpi label="High severity (P0/P1)" value={ov.high_severity} hint={`${ov.resolved_incidents} marked resolved`} tone={ov.high_severity ? "text-rose-600" : "text-slate-900 dark:text-slate-100"} />
         <Kpi label="Knowledge base" value={ov.documents} hint={`${ov.document_chunks} indexed chunks`} />
       </div>
 
@@ -77,7 +77,7 @@ export default function Dashboard() {
                   <CartesianGrid stroke="#eef2f7" vertical={false} />
                   <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                  <Tooltip />
                   <Area type="monotone" dataKey="incidents" stroke="#2b5ac4" fill="url(#g1)" strokeWidth={2} name="incidents" />
                   <Area type="monotone" dataKey="conf" stroke="#10b981" fill="none" strokeWidth={1.6} name="avg confidence %" />
                 </AreaChart>
@@ -92,12 +92,12 @@ export default function Dashboard() {
               <StatRow label="Avg attempts" value={String(ret.avg_retrieval_attempts)} />
               <StatRow label="Avg supporting docs" value={String(ret.avg_supporting_documents)} />
               <StatRow label="Avg similarity" value={pct(ret.avg_confidence)} />
-              <div className="rounded-lg bg-slate-50 p-3">
-                <div className="mb-1 flex justify-between text-xs text-slate-500">
+              <div className="rounded-lg bg-slate-50 dark:bg-[#171717] p-3">
+                <div className="mb-1 flex justify-between text-xs text-slate-500 dark:text-slate-400">
                   <span>GOOD {pct(ret.good_pct / 100)}</span>
                   <span>POOR {pct(ret.poor_pct / 100)}</span>
                 </div>
-                <div className="flex h-2 overflow-hidden rounded-full bg-slate-200">
+                <div className="flex h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-[#2f2f2f]">
                   <div className="bg-emerald-500" style={{ width: `${ret.good_pct}%` }} />
                   <div className="bg-amber-400" style={{ width: `${Math.max(0, 100 - ret.good_pct - ret.poor_pct)}%` }} />
                   <div className="bg-rose-500" style={{ width: `${ret.poor_pct}%` }} />
@@ -112,26 +112,26 @@ export default function Dashboard() {
         <Card title="Recent incidents" className="xl:col-span-2" bodyClass="p-0">
           {inc && inc.recent.length ? (
             <table className="w-full">
-              <thead className="border-b border-slate-100 bg-slate-50/70">
+              <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
                 <tr>
                   <th className="th">Incident</th><th className="th">Service</th><th className="th">Sev</th>
                   <th className="th">Confidence</th><th className="th">Retrieval</th><th className="th">When</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {inc.recent.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50">
+                  <tr key={r.id} className="hover:bg-slate-50 hover:dark:bg-[#262626]">
                     <td className="td max-w-[36ch]">
-                      <Link to={`/incidents/${r.id}`} className="block truncate font-medium text-slate-800 hover:text-brand-600">
+                      <Link to={`/incidents/${r.id}`} className="block truncate font-medium text-slate-800 dark:text-slate-200 hover:text-brand-600">
                         {r.description}
                       </Link>
-                      <span className="font-mono text-[10px] text-slate-400">{r.public_id}</span>
+                      <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">{r.public_id}</span>
                     </td>
-                    <td className="td text-slate-600">{r.service ?? "—"}</td>
+                    <td className="td text-slate-600 dark:text-slate-300">{r.service ?? "—"}</td>
                     <td className="td"><Badge tone={severityTone(r.severity)}>{r.severity ?? "—"}</Badge></td>
                     <td className="td tabular-nums">{pct(r.confidence_score)}</td>
                     <td className="td"><Badge tone={qualityTone(r.retrieval_quality)}>{r.retrieval_quality}</Badge></td>
-                    <td className="td whitespace-nowrap text-xs text-slate-500">{relTime(r.created_at)}</td>
+                    <td className="td whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{relTime(r.created_at)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -149,7 +149,7 @@ export default function Dashboard() {
                   <CartesianGrid stroke="#eef2f7" horizontal={false} />
                   <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
                   <YAxis type="category" dataKey="service" width={120} tick={{ fontSize: 11, fill: "#334155" }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                  <Tooltip />
                   <Bar dataKey="count" radius={[0, 4, 4, 0]} name="incidents">
                     {serviceData.map((_, i) => <Cell key={i} fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]} />)}
                   </Bar>
@@ -166,18 +166,18 @@ export default function Dashboard() {
 function Kpi({ label, value, hint, tone }: { label: string; value: React.ReactNode; hint?: string; tone?: string }) {
   return (
     <div className="card p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
-      <p className={`mt-1 text-2xl font-semibold tabular-nums ${tone ?? "text-slate-900"}`}>{value}</p>
-      {hint && <p className="mt-0.5 text-[11px] text-slate-500">{hint}</p>}
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</p>
+      <p className={`mt-1 text-2xl font-semibold tabular-nums ${tone ?? "text-slate-900 dark:text-slate-100"}`}>{value}</p>
+      {hint && <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">{hint}</p>}
     </div>
   );
 }
 
 function StatRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
-      <span className="text-xs text-slate-500">{label}</span>
-      <span className="text-sm font-semibold tabular-nums text-slate-800">{value}</span>
+    <div className="flex items-center justify-between rounded-lg bg-slate-50 dark:bg-[#171717] px-3 py-2">
+      <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
+      <span className="text-sm font-semibold tabular-nums text-slate-800 dark:text-slate-200">{value}</span>
     </div>
   );
 }

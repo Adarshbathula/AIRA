@@ -1,0 +1,28 @@
+# Everything here stays OUT of the docker build context (the node stage runs
+# `npm ci` + `vite build` itself, so host artifacts would only bloat the upload).
+**/node_modules
+**/dist
+**/.venv
+**/venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.vite
+.git
+.vscode
+.idea
+data/*.db
+data/*.db-journal
+data/vectorstore
+data/documents/uploads
+data/documents/_rejected
+# keep the committed samples (documents/incidents) but never ship local secrets
+backend/.env
+backend/.env.local
+frontend/.env
+frontend/.env.local
+*.log
+**/*.swp
+.DS_Store

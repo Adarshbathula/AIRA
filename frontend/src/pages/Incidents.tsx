@@ -70,8 +70,8 @@ export default function Incidents() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Incident register</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Incident register</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {isAdmin ? "All analyses across the organisation" : "Your analysed incidents"} · historical records are also used for similar-incident matching.
           </p>
         </div>
@@ -96,49 +96,49 @@ export default function Incidents() {
 
       <Card bodyClass="p-0">
         {loading ? (
-          <div className="flex justify-center py-20 text-slate-400"><Spinner className="h-7 w-7" /></div>
+          <div className="flex justify-center py-20 text-slate-400 dark:text-slate-500"><Spinner className="h-7 w-7" /></div>
         ) : rows.length === 0 ? (
           <div className="p-6"><EmptyState title="No incidents match" hint="Adjust the filters, or analyse a new incident." /></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px]">
-              <thead className="border-b border-slate-100 bg-slate-50/70">
+              <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
                 <tr>
                   <th className="th">Incident</th><th className="th">Service</th><th className="th">Category</th>
                   <th className="th">Severity</th><th className="th">Confidence</th><th className="th">Retrieval</th>
                   <th className="th">Status</th><th className="th">Created</th><th className="th text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {rows.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50/70">
+                  <tr key={r.id} className="hover:bg-slate-50/70 hover:dark:bg-white/5">
                     <td className="td max-w-[34ch]">
-                      <Link to={`/incidents/${r.id}`} className="block truncate font-medium text-slate-800 hover:text-brand-600">{r.description}</Link>
-                      <span className="font-mono text-[10px] text-slate-400">{r.public_id}</span>
+                      <Link to={`/incidents/${r.id}`} className="block truncate font-medium text-slate-800 dark:text-slate-200 hover:text-brand-600">{r.description}</Link>
+                      <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">{r.public_id}</span>
                     </td>
-                    <td className="td text-slate-600">{r.service ?? "—"}</td>
-                    <td className="td text-xs text-slate-500">{r.category ?? "—"}</td>
+                    <td className="td text-slate-600 dark:text-slate-300">{r.service ?? "—"}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{r.category ?? "—"}</td>
                     <td className="td"><Badge tone={severityTone(r.severity)}>{r.severity ?? "—"}</Badge></td>
                     <td className="td tabular-nums">
-                      <span className={r.confidence_score >= 0.7 ? "font-semibold text-emerald-700" : r.confidence_score >= 0.45 ? "text-amber-700" : "text-rose-600"}>
+                      <span className={r.confidence_score >= 0.7 ? "font-semibold text-emerald-700 dark:text-emerald-300" : r.confidence_score >= 0.45 ? "text-amber-700" : "text-rose-600"}>
                         {pct(r.confidence_score)}
                       </span>
                     </td>
                     <td className="td">
                       <Badge tone={qualityTone(r.retrieval_quality)}>{r.retrieval_quality}</Badge>
-                      {r.retrieval_attempts > 1 && <span className="ml-1 text-[10px] text-slate-400">×{r.retrieval_attempts} healed</span>}
+                      {r.retrieval_attempts > 1 && <span className="ml-1 text-[10px] text-slate-400 dark:text-slate-500">×{r.retrieval_attempts} healed</span>}
                     </td>
                     <td className="td">
-                      <Badge tone={r.resolution_status === "RESOLVED" ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200" : "bg-slate-100 text-slate-600 ring-1 ring-slate-200"}>
+                      <Badge tone={r.resolution_status === "RESOLVED" ? "bg-emerald-100 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-200" : "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10"}>
                         {r.resolution_status}
                       </Badge>
                     </td>
-                    <td className="td whitespace-nowrap text-xs text-slate-500">{fmtDate(r.created_at)}</td>
+                    <td className="td whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{fmtDate(r.created_at)}</td>
                     <td className="td text-right whitespace-nowrap">
-                      <button className="text-xs font-medium text-brand-600 hover:underline" onClick={() => void resolve(r)} disabled={busyId === r.id}>
+                      <button className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => void resolve(r)} disabled={busyId === r.id}>
                         {busyId === r.id ? "…" : r.resolution_status === "RESOLVED" ? "re-open" : "resolve"}
                       </button>
-                      <Link to={`/incidents/${r.id}`} className="ml-3 text-xs font-medium text-slate-500 hover:underline">details</Link>
+                      <Link to={`/incidents/${r.id}`} className="ml-3 text-xs font-medium text-slate-500 dark:text-slate-400 hover:underline">details</Link>
                       {isAdmin && <button className="ml-3 text-xs font-medium text-rose-600 hover:underline" onClick={() => void remove(r)}>delete</button>}
                     </td>
                   </tr>
@@ -149,7 +149,7 @@ export default function Incidents() {
         )}
       </Card>
 
-      <div className="flex items-center justify-between text-xs text-slate-500">
+      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
         <span>{total} incident(s)</span>
         <div className="flex items-center gap-2">
           <button className="btn-ghost px-2.5 py-1" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>← Prev</button>

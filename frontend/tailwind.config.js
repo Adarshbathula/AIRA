@@ -1,9 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
+        // surfaces are exposed as CSS variables (see index.css) so components
+        // that cannot use Tailwind classes - recharts, inline SVG - follow the theme
+        surface: {
+          body: "rgb(var(--surface-body) / <alpha-value>)",
+          card: "rgb(var(--surface-card) / <alpha-value>)",
+          sunken: "rgb(var(--surface-sunken) / <alpha-value>)",
+          line: "rgb(var(--surface-line) / <alpha-value>)",
+        },
         ink: {
           950: "#0b1220",
           900: "#101a2e",

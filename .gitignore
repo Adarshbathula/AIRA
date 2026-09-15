@@ -38,7 +38,8 @@ data/documents/*
 !data/documents/*.html
 !data/documents/*.doc
 
-# --- editors / os ---
+# --- editors / os --- (note: .vscode/ is deliberately NOT ignored - the repo
+# ships tasks/launch config so a clone is runnable with zero manual setup)
 .DS_Store
 .idea/
 .vscode/

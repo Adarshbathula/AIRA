@@ -75,8 +75,8 @@ export default function DocumentsAdmin() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Document management</h2>
-          <p className="text-sm text-slate-500">Ingest, categorise and retire the enterprise corpus that grounds every AI answer.</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Document management</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Ingest, categorise and retire the enterprise corpus that grounds every AI answer.</p>
         </div>
         <button className="btn-primary" onClick={() => setUploadOpen(true)}>⇪ Upload</button>
       </div>
@@ -94,35 +94,35 @@ export default function DocumentsAdmin() {
 
       <Card bodyClass="p-0">
         {loading ? (
-          <div className="flex justify-center py-20 text-slate-400"><Spinner className="h-7 w-7" /></div>
+          <div className="flex justify-center py-20 text-slate-400 dark:text-slate-500"><Spinner className="h-7 w-7" /></div>
         ) : rows.length === 0 ? (
           <div className="p-6"><EmptyState title="No documents match" hint="Upload SOPs, runbooks, RCAs, exports or logs." /></div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px]">
-              <thead className="border-b border-slate-100 bg-slate-50/70">
+              <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
                 <tr>
                   <th className="th">Document</th><th className="th">Category</th><th className="th">Service</th>
                   <th className="th">Dept</th><th className="th">Ver</th><th className="th">Chunks</th>
                   <th className="th">Size</th><th className="th">Uploaded</th><th className="th text-right">Manage</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {rows.map((d) => (
-                  <tr key={d.id} className="hover:bg-slate-50/70">
+                  <tr key={d.id} className="hover:bg-slate-50/70 hover:dark:bg-white/5">
                     <td className="td">
-                      <p className="font-medium text-slate-800">{d.name}</p>
-                      <p className="text-[11px] text-slate-400">{d.document_no} · cites as <span className="font-mono text-brand-600">{d.citation_label}</span> · <span className="uppercase">{d.type}</span></p>
+                      <p className="font-medium text-slate-800 dark:text-slate-200">{d.name}</p>
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500">{d.document_no} · cites as <span className="font-mono text-brand-600 dark:text-brand-400">{d.citation_label}</span> · <span className="uppercase">{d.type}</span></p>
                     </td>
                     <td className="td"><Badge tone="bg-violet-50 text-violet-700 ring-1 ring-violet-200">{d.category}</Badge></td>
-                    <td className="td text-slate-600">{d.service ?? "—"}</td>
-                    <td className="td text-xs text-slate-500">{d.department ?? "—"}</td>
-                    <td className="td text-xs text-slate-500">{d.version ?? "—"}</td>
+                    <td className="td text-slate-600 dark:text-slate-300">{d.service ?? "—"}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{d.department ?? "—"}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{d.version ?? "—"}</td>
                     <td className="td tabular-nums">{d.chunk_count}</td>
-                    <td className="td text-xs text-slate-500">{fmtBytes(d.file_size)}</td>
-                    <td className="td whitespace-nowrap text-xs text-slate-500">{fmtDate(d.created_at)}</td>
+                    <td className="td text-xs text-slate-500 dark:text-slate-400">{fmtBytes(d.file_size)}</td>
+                    <td className="td whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{fmtDate(d.created_at)}</td>
                     <td className="td text-right whitespace-nowrap">
-                      <button className="text-xs font-medium text-brand-600 hover:underline" onClick={() => void openEdit(d)}>edit</button>
+                      <button className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => void openEdit(d)}>edit</button>
                       <button className="ml-3 text-xs font-medium text-rose-600 hover:underline" onClick={() => void remove(d)}>delete</button>
                     </td>
                   </tr>
@@ -133,7 +133,7 @@ export default function DocumentsAdmin() {
         )}
       </Card>
 
-      <div className="flex items-center justify-between text-xs text-slate-500">
+      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
         <span>{total} document(s)</span>
         <div className="flex items-center gap-2">
           <button className="btn-ghost px-2.5 py-1" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>← Prev</button>
@@ -145,7 +145,7 @@ export default function DocumentsAdmin() {
       <Modal open={!!editing} onClose={() => setEditing(null)} title={editing ? `Edit metadata — ${editing.name}` : ""}>
         <div className="space-y-3">
           <label className="block">
-            <span className="mb-1 block text-[11px] font-medium text-slate-500">Category (drives retrieval fan-out)</span>
+            <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">Category (drives retrieval fan-out)</span>
             <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
               {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
             </select>
@@ -153,7 +153,7 @@ export default function DocumentsAdmin() {
           <div className="grid grid-cols-2 gap-3">
             {[["service", "Service"], ["department", "Department"], ["version", "Version"], ["author", "Author"]].map(([k, label]) => (
               <label key={k} className="block">
-                <span className="mb-1 block text-[11px] font-medium text-slate-500">{label}</span>
+                <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">{label}</span>
                 <input className="input" value={form[k as keyof typeof form]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
               </label>
             ))}

@@ -8,10 +8,10 @@ export default function ConfidenceBucketChart({ data }: { data: ConfidenceDist }
     <div className="h-56">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data.buckets} margin={{ left: -22, right: 8, top: 6 }}>
-          <CartesianGrid stroke="#eef2f7" vertical={false} />
-          <XAxis dataKey="bucket" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
-          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
-          <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} cursor={{ fill: "#f1f5f9" }} />
+          <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
+          <XAxis dataKey="bucket" tick={{ fontSize: 11, fill: "var(--chart-axis)" }} axisLine={false} tickLine={false} />
+          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--chart-axis)" }} axisLine={false} tickLine={false} />
+          <Tooltip cursor={{ fill: "var(--chart-cursor)" }} />
           <Bar dataKey="count" radius={[4, 4, 0, 0]} name="incidents">
             {data.buckets.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
           </Bar>

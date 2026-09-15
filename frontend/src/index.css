@@ -4,15 +4,62 @@
 
 :root {
   color-scheme: light;
+  /* surfaces consumed by Tailwind's `surface-*` tokens and by recharts */
+  --surface-body: 241 245 249;    /* slate-100 */
+  --surface-card: 255 255 255;
+  --surface-sunken: 248 250 252;  /* slate-50 */
+  --surface-line: 226 232 240;    /* slate-200 */
+  --chart-grid: #eef2f7;
+  --chart-axis: #64748b;
+  --chart-cursor: rgba(241, 245, 249, 0.6);
+  --tooltip-bg: #ffffff;
+  --tooltip-fg: #0f172a;
+  --tooltip-line: #e2e8f0;
+}
+
+/* ChatGPT-like dark theme: near-black canvas, #262626 raised cards */
+html.dark {
+  color-scheme: dark;
+  --surface-body: 23 23 23;
+  --surface-card: 38 38 38;
+  --surface-sunken: 26 26 26;
+  --surface-line: 64 64 64;
+  --chart-grid: #2f2f2f;
+  --chart-axis: #a3a3a3;
+  --chart-cursor: rgba(255, 255, 255, 0.06);
+  --tooltip-bg: #2a2a2a;
+  --tooltip-fg: #f5f5f5;
+  --tooltip-line: #3f3f3f;
+}
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: var(--tooltip-bg) !important;
+  border-color: var(--tooltip-line) !important;
+  color: var(--tooltip-fg) !important;
+}
+.recharts-default-tooltip .recharts-tooltip-label {
+  color: var(--tooltip-fg) !important;
+  margin: 0 0 2px !important;
+  opacity: 0.8;
+}
+html.dark .recharts-surface {
+  color: var(--chart-axis);
 }
 
 body {
-  @apply bg-slate-100 text-slate-800 antialiased;
+  @apply bg-surface-body text-slate-800 antialiased;
+}
+
+html.dark body {
+  @apply text-slate-200;
 }
 
 @layer components {
   .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+    @apply rounded-xl border border-slate-200 bg-surface-card shadow-sm;
+  }
+  html.dark .card {
+    border-color: rgb(255 255 255 / 0.10);
+    box-shadow: none;
   }
   .btn {
     @apply inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors
@@ -22,20 +69,38 @@ body {
     @apply btn bg-brand-600 text-white hover:bg-brand-500;
   }
   .btn-ghost {
-    @apply btn text-slate-600 hover:bg-slate-100 border border-slate-200 bg-white;
+    @apply btn border border-slate-200 bg-surface-card text-slate-600 hover:bg-slate-100;
+  }
+  html.dark .btn-ghost {
+    border-color: rgb(255 255 255 / 0.10);
+    color: #d4d4d4;
+  }
+  html.dark .btn-ghost:hover {
+    background-color: rgb(255 255 255 / 0.10);
   }
   .btn-danger {
     @apply btn bg-rose-600 text-white hover:bg-rose-500;
   }
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+    @apply w-full rounded-lg border border-slate-300 bg-surface-card px-3 py-2 text-sm
       placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-400/30;
+  }
+  html.dark .input {
+    border-color: rgb(255 255 255 / 0.15);
+    background-color: #1d1d1d;
+    color: #f1f5f1;
+  }
+  html.dark .input::placeholder {
+    color: #8a8a8a;
   }
   .badge {
     @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold;
   }
   .th {
     @apply px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+  }
+  html.dark .th {
+    color: #a3a3a3;
   }
   .td {
     @apply px-3 py-2.5 text-sm align-top;
@@ -54,6 +119,20 @@ body {
 }
 ::-webkit-scrollbar-thumb {
   @apply rounded-full bg-slate-300;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+/* pre/code blocks that were tuned for a white page */
+html.dark pre,
+html.dark code {
+  @apply text-slate-200;
+}
+html.dark table {
+  color-scheme: dark;
 }
 ::-webkit-scrollbar-track {
   background: transparent;

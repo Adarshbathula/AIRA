@@ -58,8 +58,8 @@ export default function History() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Conversation history</h2>
-          <p className="text-sm text-slate-500">Every incident analysis is preserved with its evidence trail — click to resume in the assistant.</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Conversation history</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Every incident analysis is preserved with its evidence trail — click to resume in the assistant.</p>
         </div>
         <input className="input w-72" placeholder="Search titles & message text…" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
@@ -67,7 +67,7 @@ export default function History() {
       {error && <ErrorNote message={error} />}
 
       {loading ? (
-        <div className="flex justify-center py-20 text-slate-400"><Spinner className="h-7 w-7" /></div>
+        <div className="flex justify-center py-20 text-slate-400 dark:text-slate-500"><Spinner className="h-7 w-7" /></div>
       ) : rows.length === 0 ? (
         <EmptyState title="No conversations yet" hint="Run your first incident analysis from the Incident Assistant." />
       ) : (
@@ -76,22 +76,22 @@ export default function History() {
             <Card key={c.id} className="flex flex-col justify-between">
               <div>
                 <div className="flex items-start justify-between gap-2">
-                  <button className="text-left text-sm font-semibold text-slate-800 hover:text-brand-600" onClick={() => navigate(`/assistant?c=${c.id}`)}>
+                  <button className="text-left text-sm font-semibold text-slate-800 dark:text-slate-200 hover:text-brand-600" onClick={() => navigate(`/assistant?c=${c.id}`)}>
                     {c.title}
                   </button>
                   <Badge tone={qualityTone(c.last_incident?.retrieval_quality)}>{c.last_incident?.retrieval_quality ?? "—"}</Badge>
                 </div>
                 {c.last_incident?.probable_root_cause && (
-                  <p className="mt-1.5 line-clamp-2 text-xs text-slate-500">{c.last_incident.probable_root_cause}</p>
+                  <p className="mt-1.5 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">{c.last_incident.probable_root_cause}</p>
                 )}
-                <p className="mt-2 text-[11px] text-slate-400">
+                <p className="mt-2 text-[11px] text-slate-400 dark:text-slate-500">
                   {c.message_count} messages · {c.incident_count} incident{c.incident_count === 1 ? "" : "s"} · updated {relTime(c.updated_at)}
                 </p>
               </div>
-              <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[11px] text-slate-500">
+              <div className="mt-3 flex items-center justify-between border-t border-slate-100 dark:border-white/5 pt-2.5 text-[11px] text-slate-500 dark:text-slate-400">
                 <span>conf. {pct(c.last_incident?.confidence_score)}</span>
                 <span className="flex gap-2">
-                  <button className="font-medium text-brand-600 hover:underline" onClick={() => { setRenameId(c.id); setRenameText(c.title); }}>Rename</button>
+                  <button className="font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => { setRenameId(c.id); setRenameText(c.title); }}>Rename</button>
                   <button className="font-medium text-rose-600 hover:underline" onClick={() => void doDelete(c.id)} disabled={deleting === c.id}>
                     {deleting === c.id ? "Deleting…" : "Delete"}
                   </button>

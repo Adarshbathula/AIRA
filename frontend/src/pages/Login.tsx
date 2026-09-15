@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { apiError } from "../services/api";
 import { health } from "../services/system";
 import { Spinner } from "../components/ui";
+import ThemeToggle from "../components/ThemeToggle";
 
 const DEMO = [
   { label: "Admin", email: "admin@aira.test", password: "Admin@12345" },
@@ -66,7 +67,7 @@ export default function Login() {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-lg font-bold text-white">AI</div>
             <div>
               <p className="text-lg font-semibold text-white">AI Incident Resolution Assistant</p>
-              <p className="text-xs uppercase tracking-widest text-slate-400">Self-Healing RAG · LangGraph · FAISS</p>
+              <p className="text-xs uppercase tracking-widest text-slate-400 dark:text-slate-500">Self-Healing RAG · LangGraph · FAISS</p>
             </div>
           </div>
           <p className="mt-10 max-w-md text-sm leading-relaxed text-slate-300">
@@ -88,71 +89,74 @@ export default function Login() {
             </li>
           ))}
         </ul>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           When no GROQ_API_KEY is configured the assistant runs in deterministic grounded mode:
           every recommendation is extracted from retrieved documents, never invented.
         </p>
       </div>
 
-      <div className="flex items-center justify-center bg-slate-100 p-6">
+      <div className="flex items-center justify-center bg-slate-100 p-6 dark:bg-[#171717]">
         <div className="w-full max-w-md">
+          <div className="mb-3 flex justify-end">
+            <ThemeToggle />
+          </div>
           <div className="card p-6 sm:p-8">
-            <h1 className="text-xl font-semibold text-slate-900">{mode === "login" ? "Sign in" : "Create engineer account"}</h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{mode === "login" ? "Sign in" : "Create engineer account"}</h1>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               {mode === "login" ? "Use your workspace credentials to continue." : "New accounts receive the Engineer role."}
             </p>
 
             <form className="mt-6 space-y-4" onSubmit={submit}>
               {mode === "register" && (
                 <label className="block">
-                  <span className="mb-1 block text-xs font-medium text-slate-600">Full name</span>
+                  <span className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">Full name</span>
                   <input className="input" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} placeholder="Ada Lovelace" />
                 </label>
               )}
               <label className="block">
-                <span className="mb-1 block text-xs font-medium text-slate-600">Email</span>
+                <span className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">Email</span>
                 <input className="input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@corp.test" autoComplete="username" />
               </label>
               <label className="block">
-                <span className="mb-1 block text-xs font-medium text-slate-600">Password</span>
+                <span className="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">Password</span>
                 <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={mode === "register" ? 8 : 1} autoComplete="current-password" />
               </label>
 
               {apiDown && (
-                <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                <p className="rounded-lg border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-sm text-amber-800 dark:text-amber-300">
                   The API is not reachable from this page. Start it with{" "}
                   <code className="rounded bg-amber-100 px-1 font-mono text-xs">uvicorn app.main:app --port 8000</code>{" "}
                   from <code className="rounded bg-amber-100 px-1 font-mono text-xs">backend/</code>, then sign in again.
                 </p>
               )}
-              {error && <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
+              {error && <p className="rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">{error}</p>}
 
               <button className="btn-primary w-full justify-center" disabled={busy}>
                 {busy && <Spinner />} {mode === "login" ? "Sign in" : "Register & sign in"}
               </button>
             </form>
 
-            <div className="mt-5 border-t border-slate-100 pt-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Demo accounts</p>
+            <div className="mt-5 border-t border-slate-100 dark:border-white/5 pt-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Demo accounts</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {DEMO.map((d) => (
                   <button
                     key={d.email}
                     type="button"
-                    className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-left text-xs hover:border-brand-400"
+                    className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#171717] px-2.5 py-1.5 text-left text-xs hover:border-brand-400"
                     onClick={() => { setMode("login"); setEmail(d.email); setPassword(d.password); setError(""); }}
                   >
-                    <span className="font-semibold text-slate-700">{d.label}</span>
-                    <span className="block font-mono text-[10px] text-slate-500">{d.email}</span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-300">{d.label}</span>
+                    <span className="block font-mono text-[10px] text-slate-500 dark:text-slate-400">{d.email}</span>
                   </button>
                 ))}
               </div>
-              <button className="mt-3 text-xs font-medium text-brand-600 hover:underline" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>
+              <button className="mt-3 text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>
                 {mode === "login" ? "Need an engineer account? Register" : "Back to sign in"}
               </button>
             </div>
           </div>
-          <p className="mt-4 text-center text-[11px] text-slate-400">JWT auth · bcrypt password hashing · role-based access control</p>
+          <p className="mt-4 text-center text-[11px] text-slate-400 dark:text-slate-500">JWT auth · bcrypt password hashing · role-based access control</p>
         </div>
       </div>
     </div>

@@ -40,14 +40,14 @@ export default function AdminOverview() {
   const trend = useMemo(() => (inc?.trends.series ?? []).map((s) => ({ ...s, label: s.date.slice(5), conf: +(s.avg_confidence * 100).toFixed(0) })), [inc]);
   const typeChart = useMemo(() => (docs?.by_type ?? []).map((t) => ({ ...t, type: t.type.toUpperCase() })), [docs]);
 
-  if (loading) return <div className="flex justify-center py-24 text-slate-400"><Spinner className="h-8 w-8" /></div>;
+  if (loading) return <div className="flex justify-center py-24 text-slate-400 dark:text-slate-500"><Spinner className="h-8 w-8" /></div>;
   if (error) return <ErrorNote message={error} />;
 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-semibold text-slate-900">Administration overview</h2>
-        <p className="text-sm text-slate-500">System-wide incident, retrieval, knowledge-base and audit analytics.</p>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Administration overview</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">System-wide incident, retrieval, knowledge-base and audit analytics.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -82,7 +82,7 @@ export default function AdminOverview() {
                   <CartesianGrid stroke="#eef2f7" vertical={false} />
                   <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                  <Tooltip />
                   <Area type="monotone" dataKey="incidents" stroke="#7c3aed" fill="url(#gA)" strokeWidth={2} />
                   <Area type="monotone" dataKey="conf" stroke="#10b981" fill="none" strokeWidth={1.5} name="avg confidence %" />
                 </AreaChart>
@@ -108,16 +108,16 @@ export default function AdminOverview() {
         <Card title="Knowledge base usage" subtitle="documents most often cited by the assistant" className="xl:col-span-2" bodyClass="p-0">
           {usage && usage.most_referenced.length ? (
             <table className="w-full">
-              <thead className="border-b border-slate-100 bg-slate-50/70">
+              <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
                 <tr><th className="th">Document</th><th className="th">Category</th><th className="th">Service</th><th className="th">References</th></tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {usage.most_referenced.map((u) => (
                   <tr key={u.document_no}>
-                    <td className="td font-medium text-slate-700">{u.name}</td>
+                    <td className="td font-medium text-slate-700 dark:text-slate-300">{u.name}</td>
                     <td className="td"><Badge tone="bg-violet-50 text-violet-700 ring-1 ring-violet-200">{u.category}</Badge></td>
-                    <td className="td text-slate-600">{u.service ?? "—"}</td>
-                    <td className="td tabular-nums font-semibold text-brand-600">{u.references}</td>
+                    <td className="td text-slate-600 dark:text-slate-300">{u.service ?? "—"}</td>
+                    <td className="td tabular-nums font-semibold text-brand-600 dark:text-brand-400">{u.references}</td>
                   </tr>
                 ))}
               </tbody>
@@ -133,7 +133,7 @@ export default function AdminOverview() {
                   <CartesianGrid stroke="#eef2f7" vertical={false} />
                   <XAxis dataKey="type" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
                   <YAxis allowDecimals={false} tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} cursor={{ fill: "#f1f5f9" }} />
+                  <Tooltip cursor={{ fill: "var(--chart-cursor)" }} />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                     {typeChart.map((_, i) => <Cell key={i} fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]} />)}
                   </Bar>
@@ -146,14 +146,14 @@ export default function AdminOverview() {
 
       <Card title="Audit trail" subtitle="security-relevant actions (uploads, deletions, auth, role changes)" bodyClass="p-0">
         {audit.length ? (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-slate-100 dark:divide-white/5">
             {audit.slice(0, 12).map((a) => (
               <li key={a.id} className="flex flex-wrap items-center gap-2 px-4 py-2 text-xs">
-                <span className="font-mono font-semibold text-slate-700">{a.action}</span>
+                <span className="font-mono font-semibold text-slate-700 dark:text-slate-300">{a.action}</span>
                 {a.entity_type && <Badge>{a.entity_type} {a.entity_id}</Badge>}
-                <span className="text-slate-500">user #{a.user_id ?? "?"}</span>
-                {a.detail && <span className="truncate font-mono text-[10px] text-slate-400">{JSON.stringify(a.detail).slice(0, 90)}</span>}
-                <span className="ml-auto whitespace-nowrap text-slate-400">{relTime(a.created_at)} · {fmtDate(a.created_at)}</span>
+                <span className="text-slate-500 dark:text-slate-400">user #{a.user_id ?? "?"}</span>
+                {a.detail && <span className="truncate font-mono text-[10px] text-slate-400 dark:text-slate-500">{JSON.stringify(a.detail).slice(0, 90)}</span>}
+                <span className="ml-auto whitespace-nowrap text-slate-400 dark:text-slate-500">{relTime(a.created_at)} · {fmtDate(a.created_at)}</span>
               </li>
             ))}
           </ul>
@@ -163,18 +163,18 @@ export default function AdminOverview() {
       {inc && inc.recent.length > 0 && (
         <Card title="Latest incidents (org-wide)" bodyClass="p-0">
           <table className="w-full">
-            <thead className="border-b border-slate-100 bg-slate-50/70">
+            <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
               <tr><th className="th">Incident</th><th className="th">Service</th><th className="th">Sev</th><th className="th">Confidence</th><th className="th">Retrieval</th><th className="th">Status</th></tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {inc.recent.slice(0, 6).map((r) => (
                 <tr key={r.id}>
-                  <td className="td max-w-[40ch]"><p className="truncate text-slate-700">{r.description}</p><span className="font-mono text-[10px] text-slate-400">{r.public_id}</span></td>
-                  <td className="td text-slate-600">{r.service ?? "—"}</td>
+                  <td className="td max-w-[40ch]"><p className="truncate text-slate-700 dark:text-slate-300">{r.description}</p><span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">{r.public_id}</span></td>
+                  <td className="td text-slate-600 dark:text-slate-300">{r.service ?? "—"}</td>
                   <td className="td"><Badge tone={severityTone(r.severity)}>{r.severity ?? "—"}</Badge></td>
                   <td className="td tabular-nums">{pct(r.confidence_score)}</td>
                   <td className="td"><Badge tone={qualityTone(r.retrieval_quality)}>{r.retrieval_quality}</Badge></td>
-                  <td className="td text-xs text-slate-500">{r.resolution_status}</td>
+                  <td className="td text-xs text-slate-500 dark:text-slate-400">{r.resolution_status}</td>
                 </tr>
               ))}
             </tbody>
@@ -185,10 +185,10 @@ export default function AdminOverview() {
   );
 }
 
-function Stat({ k, v, tone = "text-slate-800" }: { k: string; v: string; tone?: string }) {
+function Stat({ k, v, tone = "text-slate-800 dark:text-slate-200" }: { k: string; v: string; tone?: string }) {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2">
-      <dt className="text-xs text-slate-500">{k}</dt>
+    <div className="flex items-center justify-between rounded-lg bg-slate-50 dark:bg-[#171717] px-3 py-2">
+      <dt className="text-xs text-slate-500 dark:text-slate-400">{k}</dt>
       <dd className={`text-sm font-semibold tabular-nums ${tone}`}>{v}</dd>
     </div>
   );

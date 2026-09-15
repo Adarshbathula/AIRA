@@ -65,8 +65,8 @@ export default function UsersAdmin() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">User & role management</h2>
-          <p className="text-sm text-slate-500">Engineers can analyse incidents and browse the knowledge base; admins additionally manage the corpus, users and analytics.</p>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">User & role management</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Engineers can analyse incidents and browse the knowledge base; admins additionally manage the corpus, users and analytics.</p>
         </div>
         <div className="flex items-center gap-2">
           <input className="input w-64" placeholder="Search name / email…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -78,33 +78,33 @@ export default function UsersAdmin() {
 
       <Card bodyClass="p-0">
         {loading ? (
-          <div className="flex justify-center py-20 text-slate-400"><Spinner className="h-7 w-7" /></div>
+          <div className="flex justify-center py-20 text-slate-400 dark:text-slate-500"><Spinner className="h-7 w-7" /></div>
         ) : rows.length === 0 ? (
           <div className="p-6"><EmptyState title="No users found" /></div>
         ) : (
           <table className="w-full min-w-[760px]">
-            <thead className="border-b border-slate-100 bg-slate-50/70">
+            <thead className="border-b border-slate-100 dark:border-white/5 bg-slate-50/70">
               <tr><th className="th">User</th><th className="th">Role</th><th className="th">Status</th><th className="th">Created</th><th className="th text-right">Actions</th></tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {rows.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50/70">
+                <tr key={u.id} className="hover:bg-slate-50/70 hover:dark:bg-white/5">
                   <td className="td">
-                    <p className="font-medium text-slate-800">{u.name} {u.id === me?.id && <span className="text-[10px] font-semibold text-brand-600">(you)</span>}</p>
-                    <p className="text-xs text-slate-500">{u.email}</p>
+                    <p className="font-medium text-slate-800 dark:text-slate-200">{u.name} {u.id === me?.id && <span className="text-[10px] font-semibold text-brand-600 dark:text-brand-400">(you)</span>}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{u.email}</p>
                   </td>
                   <td className="td">
-                    <Badge tone={u.role === "admin" ? "bg-ink-900 text-white" : "bg-slate-100 text-slate-600 ring-1 ring-slate-200"}>{u.role.toUpperCase()}</Badge>
+                    <Badge tone={u.role === "admin" ? "bg-ink-900 text-white" : "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10"}>{u.role.toUpperCase()}</Badge>
                   </td>
                   <td className="td">
-                    <Badge tone={u.is_active ? "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200" : "bg-rose-100 text-rose-700 ring-1 ring-rose-200"}>
+                    <Badge tone={u.is_active ? "bg-emerald-100 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-200" : "bg-rose-100 text-rose-700 dark:text-rose-300 ring-1 ring-rose-200"}>
                       {u.is_active ? "active" : "disabled"}
                     </Badge>
                   </td>
-                  <td className="td whitespace-nowrap text-xs text-slate-500">{fmtDate(u.created_at)}</td>
+                  <td className="td whitespace-nowrap text-xs text-slate-500 dark:text-slate-400">{fmtDate(u.created_at)}</td>
                   <td className="td text-right whitespace-nowrap">
                     <button
-                      className="text-xs font-medium text-brand-600 hover:underline disabled:opacity-40"
+                      className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline disabled:opacity-40"
                       disabled={u.id === me?.id}
                       onClick={() => void toggle(u, { role: u.role === "admin" ? "user" : "admin" })}
                     >
@@ -131,20 +131,20 @@ export default function UsersAdmin() {
       <Modal open={creating} onClose={() => setCreating(false)} title="Create account">
         <div className="space-y-3">
           <label className="block">
-            <span className="mb-1 block text-[11px] font-medium text-slate-500">Full name</span>
+            <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">Full name</span>
             <input className="input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[11px] font-medium text-slate-500">Email</span>
+            <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">Email</span>
             <input className="input" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="block">
-              <span className="mb-1 block text-[11px] font-medium text-slate-500">Temporary password (min 8)</span>
+              <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">Temporary password (min 8)</span>
               <input className="input" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             </label>
             <label className="block">
-              <span className="mb-1 block text-[11px] font-medium text-slate-500">Role</span>
+              <span className="mb-1 block text-[11px] font-medium text-slate-500 dark:text-slate-400">Role</span>
               <select className="input" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
                 <option value="user">Engineer (user)</option>
                 <option value="admin">Admin</option>

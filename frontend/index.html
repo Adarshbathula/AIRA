@@ -6,8 +6,24 @@
     <title>AI Incident Resolution Assistant</title>
     <meta name="description" content="Self-Healing RAG assistant for enterprise IT incident resolution." />
     <style>
-      html { background: #f1f5f9; }
+      html { background: #171717; }
+      html:not(.dark) { background: #f1f5f9; }
     </style>
+    <script>
+      // Apply the theme before first paint so the app never flashes white.
+      (function () {
+        try {
+          var t = localStorage.getItem("aira_theme");
+          if (t !== "light" && t !== "dark") {
+            t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          if (t === "dark") document.documentElement.classList.add("dark");
+          document.documentElement.style.colorScheme = t;
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

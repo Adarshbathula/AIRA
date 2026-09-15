@@ -18,7 +18,7 @@ function RequireAuth({ children, adminOnly = false }: { children: ReactNode; adm
   const { user, loading, isAdmin } = useAuth();
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-slate-400">
+      <div className="flex h-screen items-center justify-center text-slate-400 dark:text-slate-500">
         <Spinner className="h-8 w-8" />
       </div>
     );

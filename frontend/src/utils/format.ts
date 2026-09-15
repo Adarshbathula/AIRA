@@ -30,19 +30,19 @@ export const fmtBytes = (n: number): string => {
 };
 
 export const severityTone = (s: string | null | undefined): string =>
-  ({ P0: "bg-rose-100 text-rose-700 ring-1 ring-rose-200", P1: "bg-orange-100 text-orange-700 ring-1 ring-orange-200",
-     P2: "bg-amber-100 text-amber-700 ring-1 ring-amber-200", P3: "bg-sky-100 text-sky-700 ring-1 ring-sky-200",
-     P4: "bg-slate-100 text-slate-600 ring-1 ring-slate-200" }[s ?? ""] ?? "bg-slate-100 text-slate-600 ring-1 ring-slate-200");
+  ({ P0: "bg-rose-100 text-rose-700 dark:text-rose-300 ring-1 ring-rose-200", P1: "bg-orange-100 text-orange-700 ring-1 ring-orange-200",
+     P2: "bg-amber-100 text-amber-700 ring-1 ring-amber-200", P3: "bg-sky-100 text-sky-700 dark:text-sky-300 ring-1 ring-sky-200",
+     P4: "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10" }[s ?? ""] ?? "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300 ring-1 ring-slate-200 dark:ring-white/10");
 
 export const qualityTone = (q: string | null | undefined): string =>
-  ({ GOOD: "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200",
+  ({ GOOD: "bg-emerald-100 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-200",
      FAIR: "bg-amber-100 text-amber-700 ring-1 ring-amber-200",
-     POOR: "bg-rose-100 text-rose-700 ring-1 ring-rose-200" }[q ?? ""] ?? "bg-slate-100 text-slate-600");
+     POOR: "bg-rose-100 text-rose-700 dark:text-rose-300 ring-1 ring-rose-200" }[q ?? ""] ?? "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300");
 
 export const evidenceTone = (s: string | null | undefined): string =>
-  ({ SUPPORTED: "bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200",
-     PARTIALLY_SUPPORTED: "bg-amber-100 text-amber-800 ring-1 ring-amber-200",
-     INSUFFICIENT: "bg-rose-100 text-rose-700 ring-1 ring-rose-200" }[s ?? ""] ?? "bg-slate-100 text-slate-600");
+  ({ SUPPORTED: "bg-emerald-100 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-200",
+     PARTIALLY_SUPPORTED: "bg-amber-100 text-amber-800 dark:text-amber-300 ring-1 ring-amber-200",
+     INSUFFICIENT: "bg-rose-100 text-rose-700 dark:text-rose-300 ring-1 ring-rose-200" }[s ?? ""] ?? "bg-slate-100 dark:bg-[#212121] text-slate-600 dark:text-slate-300");
 
 export const causeTone = (s: string | null | undefined): string =>
   ({ CONFIRMED: "bg-emerald-600 text-white", PROBABLE: "bg-brand-600 text-white",
