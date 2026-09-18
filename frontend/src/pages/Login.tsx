@@ -6,17 +6,11 @@ import { health } from "../services/system";
 import { Spinner } from "../components/ui";
 import ThemeToggle from "../components/ThemeToggle";
 
-const DEMO = [
-  { label: "Admin", email: "admin@aira.test", password: "Admin@12345" },
-  { label: "Engineer (Priya)", email: "priya@aira.test", password: "Engineer@123" },
-  { label: "Engineer (Arjun)", email: "arjun@aira.test", password: "Engineer@123" },
-];
-
 export default function Login() {
   const { login, user } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@aira.test");
-  const [password, setPassword] = useState("Admin@12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
@@ -137,21 +131,7 @@ export default function Login() {
             </form>
 
             <div className="mt-5 border-t border-slate-100 dark:border-white/5 pt-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Demo accounts</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {DEMO.map((d) => (
-                  <button
-                    key={d.email}
-                    type="button"
-                    className="rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#171717] px-2.5 py-1.5 text-left text-xs hover:border-brand-400"
-                    onClick={() => { setMode("login"); setEmail(d.email); setPassword(d.password); setError(""); }}
-                  >
-                    <span className="font-semibold text-slate-700 dark:text-slate-300">{d.label}</span>
-                    <span className="block font-mono text-[10px] text-slate-500 dark:text-slate-400">{d.email}</span>
-                  </button>
-                ))}
-              </div>
-              <button className="mt-3 text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>
+              <button className="text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline" onClick={() => { setMode(mode === "login" ? "register" : "login"); setError(""); }}>
                 {mode === "login" ? "Need an engineer account? Register" : "Back to sign in"}
               </button>
             </div>
